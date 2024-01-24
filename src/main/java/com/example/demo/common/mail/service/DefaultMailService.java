@@ -2,20 +2,20 @@ package com.example.demo.common.mail.service;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import static com.example.demo.constant.FreeMakerProperties.DEFAULT_ENCODING;
-import static com.example.demo.constant.FreeMakerProperties.FREEMAKER_TEMPLATE_EXTENSION;
+import static com.example.demo.constant.FreeMakerProperty.DEFAULT_ENCODING;
+import static com.example.demo.constant.FreeMakerProperty.FREEMAKER_TEMPLATE_EXTENSION;
 
 @Service
 public class DefaultMailService implements MailSender {
@@ -37,15 +37,15 @@ public class DefaultMailService implements MailSender {
 
     @Override
     public void send(String recipient, String subject, String content, String cc, String bcc)
-            throws MessagingException, UnsupportedEncodingException {
+            throws UnsupportedEncodingException, MessagingException {
         var mimeMessage = this.mailSender.createMimeMessage();
+        mimeMessage.setContent(content, "text/html; charset=UTF-8");
+
         var helper = new MimeMessageHelper(
                 mimeMessage,
                 false,
                 DEFAULT_ENCODING
         );
-
-        mimeMessage.setContent(content, "text/html; charset=UTF-8");
         helper.setFrom(this.from, this.fromName);
         helper.setTo(recipient);
         helper.setSubject(subject);
@@ -63,7 +63,8 @@ public class DefaultMailService implements MailSender {
     public void send(String recipient, String subject, Class<?> templateClass, Object model, String cc, String bcc)
             throws IOException, TemplateException, MessagingException {
         var template = this.templateConfig
-                .getTemplate(templateClass.getSimpleName().replaceAll("Template","") + FREEMAKER_TEMPLATE_EXTENSION);
+                .getTemplate(templateClass.getSimpleName().replaceAll("Template", "")
+                        + FREEMAKER_TEMPLATE_EXTENSION);
         var writer = new StringWriter();
         var env = template.createProcessingEnvironment(Map.of("model", model), writer);
         env.setOutputEncoding("UTF-8");
@@ -77,11 +78,5 @@ public class DefaultMailService implements MailSender {
     public void send(String recipient, String subject, Class<?> templateClass, Object model)
             throws IOException, TemplateException, MessagingException {
         this.send(recipient, subject, templateClass, model, null, null);
-    }
-
-    @Override
-    public void send(String recipient, String subject, String content)
-            throws MessagingException, UnsupportedEncodingException {
-        this.send(recipient, subject, content, null, null);
     }
 }

@@ -6,10 +6,11 @@ import freemarker.template.Version;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.example.demo.constant.FreeMakerProperties.*;
+import static com.example.demo.constant.FreeMakerProperty.*;
 
 @Configuration
 public class MailSenderConfig {
+
     @Bean
     public freemarker.template.Configuration freemarkerConfiguration() {
         var cfg = new freemarker.template.Configuration(new Version(FREEMAKER_VERSION));
