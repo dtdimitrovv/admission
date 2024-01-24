@@ -1,6 +1,6 @@
 package com.example.demo.constant;
 
-public class FreeMakerProperties {
+public class FreeMakerProperty {
 
     public static final String DEFAULT_ENCODING = "UTF-8";
 

@@ -20,11 +20,8 @@ public class JwtServiceImpl implements JwtService {
 
     private final Algorithm algorithm;
 
-    private final Verification verification;
-
     public JwtServiceImpl(@Value("${jwt.secret}") String secret) {
         this.algorithm = Algorithm.HMAC256(secret);
-        this.verification = JWT.require(this.algorithm);
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.example.demo.payload.response.AdmissionRegistrationResponse;
 import com.example.demo.payload.response.LoginResponse;
 
 public interface AdmissionService {
-//    AdmissionRegistrationResponse register(AdmissionRegistrationRequest request);
     AdmissionRegistrationResponse registerTrainee(AdmissionRegistrationRequest request);
 
     AdmissionRegistrationResponse registerTrainer(AdmissionRegistrationRequest request);

@@ -15,12 +15,16 @@ import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.NewPasswordRequest;
 import com.example.demo.payload.response.AdmissionRegistrationResponse;
 import com.example.demo.payload.response.LoginResponse;
+import com.example.demo.payload.template.ProfileRegistrationTemplate;
 import com.example.demo.repository.AdmissionRepository;
 import com.example.demo.security.jwt.JwtService;
+import freemarker.template.TemplateException;
+import jakarta.mail.MessagingException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Set;
 
 import static com.example.demo.constant.ErrorMessage.INVALID_PASSWORD;
@@ -119,16 +123,16 @@ public class AdmissionServiceImpl implements AdmissionService {
 
             var savedUser = this.admissionRepository.save(user);
 
-//            this.mailSender.send(request.profileRegistrationRequest().email(),
-//                    "Profile Registration",
-//                    ProfileRegistrationTemplate.class,
-//                    new ProfileRegistrationTemplate(request.profileRegistrationRequest().firstName())
-//            );
+            this.mailSender.send(request.profileRegistrationRequest().email(),
+                    "Profile Registration",
+                    ProfileRegistrationTemplate.class,
+                    new ProfileRegistrationTemplate(request.profileRegistrationRequest().firstName())
+            );
 
             this.producerService.send(savedUser.getId(), userType);
 
             return this.admissionMapper.map(savedUser);
-        } catch (DataIntegrityViolationException /*| IOException | TemplateException | MessagingException*/ e) {
+        } catch (DataIntegrityViolationException | IOException | TemplateException | MessagingException e) {
             e.printStackTrace();
             return null;
         }

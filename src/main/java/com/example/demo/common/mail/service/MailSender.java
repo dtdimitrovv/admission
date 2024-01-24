@@ -1,15 +1,12 @@
 package com.example.demo.common.mail.service;
 
 import freemarker.template.TemplateException;
+import jakarta.mail.MessagingException;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 public interface MailSender {
-    void send(String recipient, String subject, String content)
-            throws MessagingException, UnsupportedEncodingException;
-
     void send(String recipient, String subject, Class<?> templateClass, Object model)
             throws IOException, TemplateException, MessagingException;
 

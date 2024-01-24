@@ -1,13 +1,18 @@
 package com.example.demo.entity;
 
-import com.example.demo.common.entity.BaseEntity;
+import com.example.authorizationValidator.entity.WithPrimaryKeyBaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 
-import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "admissions")
-public class Admission extends BaseEntity {
+public class Admission extends WithPrimaryKeyBaseEntity {
     private String username;
     private String password;
     private Set<Role> roles;
